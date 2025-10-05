@@ -1,0 +1,29 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "${PORT}:${PORT}"   # Render define PORT automáticamente
+    environment:
+      - PORT=10000          # Valor por defecto si Render no lo define
+      - MYSQL_HOST=db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DATABASE=inventariodb
+    depends_on:
+      - db
+    volumes:
+      - .:/var/www/html
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: inventariodb
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
